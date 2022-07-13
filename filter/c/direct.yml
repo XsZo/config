@@ -1,0 +1,19 @@
+payload:
+  - ip6-localhost
+  - ip6-loopback
+  - local
+  - localhost
+  - +.captive.apple.com
+  - +.connectivitycheck.gstatic.com
+  - +.docstransfer.com
+  - +.miwifi.com
+  - +.msftconnecttest.com
+  - +.msftncsi.com
+  - +.my.router
+  - +.pdfwifi.com
+  - +.pool.ntp.org
+  - +.router.asus.com
+  - +.time.apple.com
+  - +.time.cloudflare.com
+  - +.time.google.com
+  - +.time.windows.com

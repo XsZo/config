@@ -1,0 +1,4 @@
+host-suffix,applovin.com,proxy
+host-suffix,applvn.com,proxy
+host-suffix,flurry.com,proxy
+host-suffix,vungle.com,proxy

@@ -1,0 +1,8 @@
+DOMAIN-SUFFIX,bc.googleusercontent.com
+DOMAIN-SUFFIX,colorfulpalette.org
+DOMAIN-SUFFIX,craftegg.jp
+DOMAIN-SUFFIX,cygames.co.jp
+DOMAIN-SUFFIX,cygames.jp
+DOMAIN-SUFFIX,gamon.net
+DOMAIN-SUFFIX,mobimon.com.tw
+DOMAIN-SUFFIX,worldflipper.jp

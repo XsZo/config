@@ -1,0 +1,4 @@
+DOMAIN-SUFFIX,applovin.com
+DOMAIN-SUFFIX,applvn.com
+DOMAIN-SUFFIX,flurry.com
+DOMAIN-SUFFIX,vungle.com
