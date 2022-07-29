@@ -1,0 +1,308 @@
+log-level: silent
+mode: rule
+ipv6: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+external-controller: 127.0.0.1:9090
+secret: ""
+# external-ui: folder
+
+mixed-port: 7890
+allow-lan: false
+bind-address: "*"
+# authentication:
+#   - "user:pass"
+tun:
+  enable: true
+  stack: gvisor
+  dns-hijack:
+    - 198.18.0.2:53
+  auto-route: true
+  auto-detect-interface: true
+
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  ipv6: true
+  use-hosts: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "+.lan"
+    - "+.local"
+  default-nameserver:
+    - "8.8.8.8:53"
+    - "8.8.4.4:53"
+    - "[2001:4860:4860::8888]:53"
+    - "[2001:4860:4860::8844]:53"
+  nameserver:
+    - https://dns.google/dns-query
+  nameserver-policy:
+    # "example.com": "1.1.1.1"
+hosts:
+  # "example.com": 127.0.0.1
+
+proxy-groups:
+  - name: 🏳️‍🌈DEFAULT
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍🌈GLOBAL
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️SYSTEM
+    type: select
+    proxies:
+      - 🏳️‍🌈GLOBAL
+      - DIRECT
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️GAME
+    type: select
+    proxies:
+      - 🏳️‍🌈GLOBAL
+      - DIRECT
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍🌈REGION
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️CN
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - CN
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️JP
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - JP
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️TW
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - TW
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍⚧️US
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+
+  - name: NODE0
+    type: select
+    proxies:
+      - /.*/
+  - name: NODE1
+    type: select
+    proxies:
+      - /.*/
+  - name: NODE2
+    type: select
+    proxies:
+      - /.*/
+  - name: NODE3
+    type: select
+    proxies:
+      - /.*/
+
+  - name: CN
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((CN)|(China))(?![a-zA-Z])|(中)|(回国)/
+  - name: DE
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((DE)|(German)|(Berlin))(?![a-zA-Z])|(德)/
+  - name: GB
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((GB)|(UK)|(London))(?![a-zA-Z])|(英)/
+  - name: JP
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((JP)|(Japan)|(Tokyo))(?![a-zA-Z])|(日本?)/
+  - name: SG
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((SG)|(Singapore))(?![a-zA-Z])|(新(加坡)?)/
+  - name: TW
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((TW)|(Taiwan))(?![a-zA-Z])|(台灣?)/
+  - name: US
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    proxies:
+      - /(?<![a-zA-Z])((US)|(NY)|(LA))(?![a-zA-Z])|(美)/
+
+rule-providers:
+  DIRECT:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/direct.yml
+    path: ./providers/direct.yml
+    interval: 604800
+  DIRECT-IP:
+    behavior: ipcidr
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/direct.ip.yml
+    path: ./providers/direct.ip.yml
+    interval: 604800
+  GLOBAL:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/global.yml
+    path: ./providers/global.yml
+    interval: 604800
+  SYSTEM:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/system.yml
+    path: ./providers/system.yml
+    interval: 604800
+  GAME:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/game.yml
+    path: ./providers/game.yml
+    interval: 604800
+  REGION:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/region.yml
+    path: ./providers/region.yml
+    interval: 604800
+  R-CN:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-cn.yml
+    path: ./providers/r-cn.yml
+    interval: 604800
+  R-JP:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-jp.yml
+    path: ./providers/r-jp.yml
+    interval: 604800
+  R-TW:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-tw.yml
+    path: ./providers/r-tw.yml
+    interval: 604800
+  R-US:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-us.yml
+    path: ./providers/r-us.yml
+    interval: 604800
+  BLOCK:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/block.yml
+    path: ./providers/block.yml
+    interval: 604800
+
+rules:
+  - RULE-SET, DIRECT, DIRECT
+  - RULE-SET, BLOCK, REJECT
+  - RULE-SET, SYSTEM, 🏳️‍⚧️SYSTEM
+  - RULE-SET, GAME, 🏳️‍⚧️GAME
+  - RULE-SET, GLOBAL, 🏳️‍🌈GLOBAL
+  - RULE-SET, R-CN, 🏳️‍⚧️CN
+  - RULE-SET, R-JP, 🏳️‍⚧️JP
+  - RULE-SET, R-TW, 🏳️‍⚧️TW
+  - RULE-SET, R-US, 🏳️‍⚧️US
+  - RULE-SET, REGION, 🏳️‍🌈REGION
+  - RULE-SET, DIRECT-IP, DIRECT
+  # - GEOIP, CountryCode, DIRECT
+  - GEOIP, CN, 🏳️‍⚧️CN
+  - MATCH, 🏳️‍🌈GLOBAL

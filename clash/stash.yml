@@ -1,0 +1,249 @@
+log-level: silent
+mode: rule
+dns:
+  fake-ip-filter:
+    - "+.lan"
+    - "+.local"
+  default-nameserver:
+    - system
+    - "1.1.1.1:53"
+    - "1.0.0.1:53"
+    - "[2606:4700:4700::1111]:53"
+    - "[2606:4700:4700::1001]:53"
+  nameserver:
+    - https://cloudflare-dns.com/dns-query
+  nameserver-policy:
+    # "example.com": "1.1.1.1"
+hosts:
+  # "example.com": 127.0.0.1
+
+proxy-groups:
+  - name: 🏳️‍🌈DEFAULT
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍🌈GLOBAL
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔SYSTEM
+    type: select
+    proxies:
+      - 🏳️‍🌈GLOBAL
+      - DIRECT
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔GAME
+    type: select
+    proxies:
+      - 🏳️‍🌈GLOBAL
+      - DIRECT
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: 🏳️‍🌈REGION
+    type: select
+    proxies:
+      - DIRECT
+      - CN
+      - DE
+      - GB
+      - JP
+      - SG
+      - TW
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔CN
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - CN
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔JP
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - JP
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔TW
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - TW
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+  - name: ↔US
+    type: select
+    proxies:
+      - 🏳️‍🌈REGION
+      - DIRECT
+      - US
+      - NODE0
+      - NODE1
+      - NODE2
+      - NODE3
+
+  - name: NODE0
+    type: select
+    filter: ".*"
+  - name: NODE1
+    type: select
+    filter: ".*"
+  - name: NODE2
+    type: select
+    filter: ".*"
+  - name: NODE3
+    type: select
+    filter: ".*"
+
+  - name: CN
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((CN)|(China))(?![a-zA-Z])|(中)|(回国)"
+  - name: DE
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((DE)|(German)|(Berlin))(?![a-zA-Z])|(德)"
+  - name: GB
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((GB)|(UK)|(London))(?![a-zA-Z])|(英)"
+  - name: JP
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((JP)|(Japan)|(Tokyo))(?![a-zA-Z])|(日本?)"
+  - name: SG
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((SG)|(Singapore))(?![a-zA-Z])|(新(加坡)?)"
+  - name: TW
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((TW)|(Taiwan))(?![a-zA-Z])|(台灣?)"
+  - name: US
+    type: url-test
+    lazy: true
+    url: http://g.co/generate_204
+    interval: 300
+    tolerance: 0
+    filter: "(?<![a-zA-Z])((US)|(NY)|(LA))(?![a-zA-Z])|(美)"
+
+rule-providers:
+  DIRECT:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/direct.txt
+    interval: 604800
+  DIRECT-IP:
+    behavior: ipcidr
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/direct.ip.yml
+    interval: 604800
+  GLOBAL:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/global.txt
+    interval: 604800
+  SYSTEM:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/system.txt
+    interval: 604800
+  GAME:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/game.txt
+    interval: 604800
+  REGION:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/region.txt
+    interval: 604800
+  R-CN:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/r-cn.txt
+    interval: 604800
+  R-JP:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/r-jp.txt
+    interval: 604800
+  R-TW:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/r-tw.txt
+    interval: 604800
+  R-US:
+    behavior: domain-text
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/s/r-us.txt
+    interval: 604800
+
+rules:
+  - RULE-SET, DIRECT, DIRECT
+  - RULE-SET, GLOBAL, 🏳️‍🌈GLOBAL
+  - RULE-SET, SYSTEM, ↔SYSTEM
+  - RULE-SET, GAME, ↔GAME
+  - RULE-SET, REGION, 🏳️‍🌈REGION
+  - RULE-SET, R-CN, ↔CN
+  - RULE-SET, R-JP, ↔JP
+  - RULE-SET, R-TW, ↔TW
+  - RULE-SET, R-US, ↔US
+  - RULE-SET, DIRECT-IP, DIRECT
+  # - GEOIP, CountryCode, DIRECT
+  - GEOIP, CN, ↔CN
+  - MATCH, 🏳️‍🌈GLOBAL
+
+proxy-providers:
+  sample:
+    url: https://example.com/sample.yml
+    interval: 86400
+    # filter: ".*"

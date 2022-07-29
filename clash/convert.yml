@@ -1,0 +1,94 @@
+log-level: silent
+mode: rule
+ipv6: true
+mixed-port: 7890
+
+tun:
+  enable: true
+  stack: gvisor
+  dns-hijack:
+    - 198.18.0.2:53
+  auto-route: true
+  auto-detect-interface: true
+
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - "223.5.5.5:53"
+    - "223.6.6.6:53"
+    - "[2400:3200::1]:53"
+    - "[2400:3200:baba::1]:53"
+  nameserver:
+    - https://dns.alidns.com/dns-query
+
+rule-providers:
+  DIRECT:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/direct.yml
+    path: ./providers/direct.yml
+    interval: 86400
+  DIRECT-IP:
+    behavior: ipcidr
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/direct.ip.yml
+    path: ./providers/direct.ip.yml
+    interval: 86400
+  BLOCK:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/block.yml
+    path: ./providers/block.yml
+    interval: 86400
+  GLOBAL:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/global.yml
+    path: ./providers/global.yml
+    interval: 86400
+  SYSTEM:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/system.yml
+    path: ./providers/system.yml
+    interval: 86400
+  GAME:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/game.yml
+    path: ./providers/game.yml
+    interval: 86400
+  REGION:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/region.yml
+    path: ./providers/region.yml
+    interval: 86400
+  R-CN:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-cn.yml
+    path: ./providers/r-cn.yml
+    interval: 86400
+  R-JP:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-jp.yml
+    path: ./providers/r-jp.yml
+    interval: 86400
+  R-TW:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-tw.yml
+    path: ./providers/r-tw.yml
+    interval: 86400
+  R-US:
+    behavior: domain
+    type: http
+    url: https://cdn.jsdelivr.net/gh/XsZo/config@net-rule/filter/c/r-us.yml
+    path: ./providers/r-us.yml
+    interval: 86400
